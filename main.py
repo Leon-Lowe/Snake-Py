@@ -5,6 +5,10 @@ import time
 import random
 
 SIZE = 40
+
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 800
+
 BACKGROUND_COLOUR = (110, 110, 5)
 MAIN_FONT_COLOUR = (237, 237, 237)
 SECONDARY_FONT_COLOUR = (156, 156, 156)
@@ -17,7 +21,7 @@ class Game:
         pygame.mixer.init()
         self.play_background_music()
 
-        self.surface = pygame.display.set_mode((1000, 800))
+        self.surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.surface.fill(BACKGROUND_COLOUR)
         self.snake = Snake(self.surface, 1)
         self.snake.draw()
@@ -81,9 +85,13 @@ class Game:
         line2 = line2_font.render(f"Your score was {self.snake.length - 1}", True, MAIN_FONT_COLOUR)
         line3 = line3_font.render(f"Press 'Enter' to play again", True, SECONDARY_FONT_COLOUR)
 
-        self.surface.blit(line1, (200, 300))
-        self.surface.blit(line2, (200, 400))
-        self.surface.blit(line3, (200, 450))
+        line1_rect = line1.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+        line2_rect = line2.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 50))
+        line3_rect = line3.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 100))
+
+        self.surface.blit(line1, line1_rect)
+        self.surface.blit(line2, line2_rect)
+        self.surface.blit(line3, line3_rect)
 
         pygame.display.update()
 
