@@ -8,7 +8,7 @@ class Game:
         pygame.init()
         self.surface = pygame.display.set_mode((1000, 500))
         self.surface.fill((110,110,5))
-        self.snake = Snake(self.surface)
+        self.snake = Snake(self.surface, 2)
         self.snake.draw()
 
     def run(self):
@@ -28,35 +28,54 @@ class Game:
 
                 elif event.type == QUIT:
                     running = False
+            
+            self.snake.walk()
+            time.sleep(.3)
+
+SIZE = 42
 
 class Snake:
-    def __init__(self, parent_screen):
+    def __init__(self, parent_screen, length):
         self.parent_screen = parent_screen
-        self.move_speed = 10
+        self.length = length
         self.block = pygame.image.load("Resources/Images/block.jpg").convert()
-        self.x = 100
-        self.y = 100
+        self.x = [SIZE]*length
+        self.y = [SIZE]*length
+        self.direction = "down"
 
     def draw(self):
         self.parent_screen.fill((110,110,5))
-        self.parent_screen.blit(self.block, (self.x, self.y))
+        for i in range(self.length):
+            self.parent_screen.blit(self.block, (self.x[i], self.y[i]))
         pygame.display.update()
 
-    def move_left(self):
-        self.x -= self.move_speed
+    def walk(self):
+
+        for i in range(self.length - 1, 0, -1):
+            self.x[i] = self.x[i-1]
+            self.y[i] = self.y[i-1]
+
+        if self.direction == "down":
+            self.y[0] += SIZE
+        if self.direction == "up":
+            self.y[0] -= SIZE
+        if self.direction == "left":
+            self.x[0] -= SIZE
+        if self.direction == "right":
+            self.x[0] += SIZE
         self.draw()
+
+    def move_left(self):
+        self.direction = "left"
 
     def move_right(self):
-        self.x += self.move_speed
-        self.draw()
+        self.direction = "right"
 
     def move_down(self):
-        self.y += self.move_speed
-        self.draw()
+        self.direction = "down"
 
     def move_up(self):
-        self.y -= self.move_speed
-        self.draw()
+        self.direction = "up"
 
 if __name__ == "__main__":
     game = Game()
